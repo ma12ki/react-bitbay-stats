@@ -1,5 +1,7 @@
-const { ticker } = require('./bitbay');
+const { ticker, info, history, transactions } = require('./bitbay');
 
-ticker('BTC').then(res => {
+ticker().then(res => {
     console.log(res);
 });
+
+// transactions().then(res => console.log(res));

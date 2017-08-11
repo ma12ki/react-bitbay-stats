@@ -1,8 +1,6 @@
 const axios = require('axios');
 
-const { publicApiUrl } = require('../../config');
-
-const defaultFiatCurrency = 'PLN';
+const { publicApiUrl, defaultFiatCurrency, cryptoCurrencies } = require('../../config');
 
 const axiosApi = axios.create({
     baseURL: publicApiUrl,
@@ -10,10 +8,27 @@ const axiosApi = axios.create({
     responseType: 'json',
 });
 
-const ticker = async (cryptocurrency, fiatCurrency = defaultFiatCurrency) => {
+const ticker = async (fiatCurrency = defaultFiatCurrency) => {
+    const promises = Object.keys(cryptoCurrencies)
+        .map(currency => tickerOne(currency, fiatCurrency));
+    
+    const values = await Promise.all(promises);
+
+    const ret = {};
+
+    values.forEach((val) => {
+        ret[val.currency] = val;
+    });
+
+    return ret;
+};
+
+const tickerOne = async (cryptocurrency, fiatCurrency = defaultFiatCurrency) => {
     const res = await axiosApi.request({
         url: buildEndpointUri(cryptocurrency, 'ticker', fiatCurrency),
     });
+
+    res.data.currency = cryptocurrency;
 
     return res.data;
 };
@@ -22,5 +37,5 @@ const buildEndpointUri = (cryptocurrency, method, fiatCurrency = defaultFiatCurr
     `${cryptocurrency}${fiatCurrency}/${method}.json`;
 
 module.exports = {
-    ticker
+    ticker,
 };
