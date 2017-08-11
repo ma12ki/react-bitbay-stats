@@ -1,5 +1,7 @@
 const dotenv = require('dotenv');
 
+const { defaultFiatCurrency, cryptoCurrencies } = require('../../../common'); 
+
 dotenv.config();
 
 const publicApiUrl = process.env.BITBAY_PUBLIC_API_URL;
@@ -12,4 +14,6 @@ module.exports =  {
     secretApiUrl,
     publicKey,
     secretKey,
+    defaultFiatCurrency,
+    cryptoCurrencies,
 };
