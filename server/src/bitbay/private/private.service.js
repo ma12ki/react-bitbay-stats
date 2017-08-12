@@ -2,12 +2,15 @@ const axios = require('axios').default;
 const crypto = require('crypto');
 
 const { secretApiUrl, publicKey, secretKey, defaultFiatCurrency } = require('../../config');
+const { transform } = require('./response-transformer');
 const rquiredWaitBetweenCalls = 1200;
 
-const status = async() => {
-    const info = await info();
+const status = async () => {
+    const profileInfo = await info();
     await wait(rquiredWaitBetweenCalls);
-    const transactions = await history();
+    const profileTransactions = await transactions();
+
+    return transform(profileInfo, profileTransactions);
 };
 
 const info = async () => {
@@ -64,7 +67,5 @@ const wait = (millis) => {
 };
 
 module.exports = {
-    info,
-    history,
-    transactions,
+    status
 };

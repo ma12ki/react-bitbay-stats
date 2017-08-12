@@ -8,9 +8,3 @@ server.listen(port, (err) => {
         console.log(`Server listening on port ${port}`);
     }
 });
-
-// ticker().then(res => {
-//     console.log(res);
-// });
-
-// transactions().then(res => console.log(res));
