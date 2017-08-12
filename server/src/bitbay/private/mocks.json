@@ -1,0 +1,144 @@
+{
+    "fiat": {
+        "currency": "PLN",
+        "balance": 11.25
+    },
+    "fee": 0.42,
+    "balances": [
+        {
+            "currency": "BTC",
+            "balance": 0.28691404,
+            "soldAmount": 0,
+            "soldValue": 0,
+            "boughtAmount": 0.28691404,
+            "boughtValue": 3701.46,
+            "gain": -3701.46,
+            "transactions": [
+                {
+                    "date": "2017-08-11T17:55:37.000Z",
+                    "type": "BID",
+                    "market": "BTC-PLN",
+                    "amount": 0.20933452,
+                    "rate": 12905,
+                    "price": 2701.46
+                },
+                {
+                    "date": "2017-08-11T15:13:16.000Z",
+                    "type": "BID",
+                    "market": "BTC-PLN",
+                    "amount": 0.07757952,
+                    "rate": 12890,
+                    "price": 1000
+                }
+            ]
+        },
+        {
+            "currency": "LTC",
+            "balance": 10,
+            "soldAmount": 0,
+            "soldValue": 0,
+            "boughtAmount": 10,
+            "boughtValue": 1720,
+            "gain": -1720,
+            "transactions": [
+                {
+                    "date": "2017-08-11T14:53:56.000Z",
+                    "type": "BID",
+                    "market": "LTC-PLN",
+                    "amount": 10,
+                    "rate": 172,
+                    "price": 1720
+                }
+            ]
+        },
+        {
+            "currency": "ETH",
+            "balance": 1.85049332,
+            "soldAmount": 0,
+            "soldValue": 0,
+            "boughtAmount": 1.85049332,
+            "boughtValue": 2054.0299999999997,
+            "gain": -2054.0299999999997,
+            "transactions": [
+                {
+                    "date": "2017-08-11T14:55:42.000Z",
+                    "type": "BID",
+                    "market": "ETH-PLN",
+                    "amount": 1,
+                    "rate": 1110,
+                    "price": 1110
+                },
+                {
+                    "date": "2017-08-11T14:47:41.000Z",
+                    "type": "BID",
+                    "market": "ETH-PLN",
+                    "amount": 0.85049332,
+                    "rate": 1109.99,
+                    "price": 944.03
+                }
+            ]
+        },
+        {
+            "currency": "LSK",
+            "balance": 151.41376866000002,
+            "soldAmount": 0,
+            "soldValue": 0,
+            "boughtAmount": 151.41376866000002,
+            "boughtValue": 1243.21,
+            "gain": -1243.21,
+            "transactions": [
+                {
+                    "date": "2017-08-11T15:01:47.000Z",
+                    "type": "BID",
+                    "market": "LSK-PLN",
+                    "amount": 110,
+                    "rate": 8.21,
+                    "price": 903.1
+                },
+                {
+                    "date": "2017-08-11T14:59:10.000Z",
+                    "type": "BID",
+                    "market": "LSK-PLN",
+                    "amount": 29.9,
+                    "rate": 8.21,
+                    "price": 245.47
+                },
+                {
+                    "date": "2017-08-11T14:52:33.000Z",
+                    "type": "BID",
+                    "market": "LSK-PLN",
+                    "amount": 11.51376866,
+                    "rate": 8.22,
+                    "price": 94.64
+                }
+            ]
+        },
+        {
+            "currency": "BCC",
+            "balance": 0.70630233,
+            "soldAmount": 0,
+            "soldValue": 0,
+            "boughtAmount": 0.70630233,
+            "boughtValue": 1270.0500000000002,
+            "gain": -1270.0500000000002,
+            "transactions": [
+                {
+                    "date": "2017-08-11T18:17:00.000Z",
+                    "type": "BID",
+                    "market": "BCC-PLN",
+                    "amount": 0.56209508,
+                    "rate": 1789,
+                    "price": 1005.58
+                },
+                {
+                    "date": "2017-08-11T15:11:00.000Z",
+                    "type": "BID",
+                    "market": "BCC-PLN",
+                    "amount": 0.14420725,
+                    "rate": 1834,
+                    "price": 264.47
+                }
+            ]
+        }
+    ]
+}

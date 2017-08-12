@@ -1,0 +1,57 @@
+{
+    "BTC": {
+        "max": 13814,
+        "min": 12745,
+        "last": 13789.84,
+        "bid": 13789.84,
+        "ask": 13790,
+        "vwap": 13243.69,
+        "average": 13789.84,
+        "volume": 1305.1108509,
+        "currency": "BTC"
+    },
+    "LTC": {
+        "max": 174.9,
+        "min": 168,
+        "last": 171.97,
+        "bid": 171.97,
+        "ask": 171.98,
+        "vwap": 171.02,
+        "average": 171.97,
+        "volume": 3141.09669366,
+        "currency": "LTC"
+    },
+    "ETH": {
+        "max": 1160,
+        "min": 1100,
+        "last": 1132,
+        "bid": 1131.88,
+        "ask": 1133.49,
+        "vwap": 1130.04,
+        "average": 1132,
+        "volume": 1647.73163786,
+        "currency": "ETH"
+    },
+    "LSK": {
+        "max": 8.31,
+        "min": 7.6,
+        "last": 7.77,
+        "bid": 7.77,
+        "ask": 7.79,
+        "vwap": 8.04,
+        "average": 7.77,
+        "volume": 95524.91222744,
+        "currency": "LSK"
+    },
+    "BCC": {
+        "max": 1850,
+        "min": 1593,
+        "last": 1734.72,
+        "bid": 1731.08,
+        "ask": 1741.32,
+        "vwap": 1698.48,
+        "average": 1734.72,
+        "volume": 425.60238769,
+        "currency": "BCC"
+    }
+}
