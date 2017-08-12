@@ -1,3 +1,3 @@
-const service = require('./public.service');
+const controller = require('./public.controller');
 
-module.exports = Object.assign({}, service);
+module.exports = Object.assign({}, controller);
