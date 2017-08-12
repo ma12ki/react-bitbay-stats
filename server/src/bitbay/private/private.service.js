@@ -1,9 +1,14 @@
 const axios = require('axios').default;
 const crypto = require('crypto');
 
-const { secretApiUrl, publicKey, secretKey } = require('../../config');
+const { secretApiUrl, publicKey, secretKey, defaultFiatCurrency } = require('../../config');
+const rquiredWaitBetweenCalls = 1200;
 
-const defaultFiatCurrency = 'PLN';
+const status = async() => {
+    const info = await info();
+    await wait(rquiredWaitBetweenCalls);
+    const transactions = await history();
+};
 
 const info = async () => {
     return apiRequest('info');
@@ -50,6 +55,12 @@ const hash = (text) => {
     const value = hash.digest('hex');
 
     return value;
+};
+
+const wait = (millis) => {
+    return new Promise((resolve) => {
+        setTimeout(resolve, millis);
+    });
 };
 
 module.exports = {
