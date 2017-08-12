@@ -1,13 +1,15 @@
 const express = require('express');
 const cors = require('cors');
 
-const { ticker, status } = require('./bitbay');
+const bitbay = require('./bitbay');
 
 const server = express();
 const router = express.Router();
 
-router.get('/ticker', ticker);
-router.get('/status', status);
+router.get('/ticker', bitbay.ticker);
+router.get('/ticker/refresh', bitbay.tickerRefresh);
+router.get('/status', bitbay.status);
+router.get('/status/refresh', bitbay.statusRefresh);
 
 server.use(cors());
 

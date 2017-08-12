@@ -1,6 +1,8 @@
 const axios = require('axios');
 
 const { publicApiUrl, defaultFiatCurrency, cryptoCurrencies } = require('../../config');
+const cache = require('../cache');
+const tickerCacheKey = 'TICKER';
 
 const axiosApi = axios.create({
     baseURL: publicApiUrl,
@@ -9,16 +11,25 @@ const axiosApi = axios.create({
 });
 
 const ticker = async (fiatCurrency = defaultFiatCurrency) => {
+    if (cache.has(tickerCacheKey)) {
+        return cache.get(tickerCacheKey);
+    }
+    return tickerRefresh(fiatCurrency);
+};
+
+const tickerRefresh = async (fiatCurrency = defaultFiatCurrency) => {
     const promises = Object.keys(cryptoCurrencies)
         .map(currency => tickerOne(currency, fiatCurrency));
     
     const values = await Promise.all(promises);
-
+    
     const ret = {};
-
+    
     values.forEach((val) => {
         ret[val.currency] = val;
     });
+
+    cache.set(tickerCacheKey, ret);
 
     return ret;
 };
@@ -38,4 +49,5 @@ const buildEndpointUri = (cryptocurrency, method, fiatCurrency = defaultFiatCurr
 
 module.exports = {
     ticker,
+    tickerRefresh,
 };

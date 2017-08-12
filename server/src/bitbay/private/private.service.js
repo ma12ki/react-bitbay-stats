@@ -3,14 +3,26 @@ const crypto = require('crypto');
 
 const { secretApiUrl, publicKey, secretKey, defaultFiatCurrency } = require('../../config');
 const { transform } = require('./response-transformer');
-const rquiredWaitBetweenCalls = 1200;
+const cache = require('../cache');
+const statusCacheKey = 'STATUS';
+const requiredWaitBetweenCalls = 1200;
 
 const status = async () => {
-    const profileInfo = await info();
-    await wait(rquiredWaitBetweenCalls);
-    const profileTransactions = await transactions();
+    if (cache.has(statusCacheKey)) {
+        return cache.get(statusCacheKey);
+    }
+    return statusRefresh();
+};
 
-    return transform(profileInfo, profileTransactions);
+const statusRefresh = async () => {
+    const profileInfo = await info();
+    await wait(requiredWaitBetweenCalls);
+    const profileTransactions = await transactions();
+    const transformed = transform(profileInfo, profileTransactions);
+
+    cache.set(statusCacheKey, transformed);
+
+    return transformed;
 };
 
 const info = async () => {
@@ -67,5 +79,6 @@ const wait = (millis) => {
 };
 
 module.exports = {
-    status
+    status,
+    statusRefresh,
 };
