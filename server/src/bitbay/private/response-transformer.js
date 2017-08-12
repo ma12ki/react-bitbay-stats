@@ -78,7 +78,18 @@ const transform = (info, transactions) => {
     return Object.assign({}, {
         fiat: getFiatBalance(info),
         fee: getFee(info),
-        balances: getCryptoBalances(info, transactions),
+        balances: getCryptoBalances(info, mapTransactionFieldTypes(transactions)),
+    });
+};
+
+const mapTransactionFieldTypes = (transactions) => {
+    return transactions.map((transaction) => {
+        transaction.amount = Number(transaction.amount);
+        transaction.rate = Number(transaction.rate);
+        transaction.price = Number(transaction.price);
+        transaction.date = new Date(transaction.date);
+
+        return transaction;
     });
 };
 
@@ -112,9 +123,7 @@ const getCryptoBalances = (info, transactions) => {
 };
 
 const getTransactionsForCurrency = (currency, transactions) => {
-    return transactions.filter((transaction) => {
-        return transaction.market.startsWith(currency);
-    });
+    return transactions.filter((transaction) => transaction.market.startsWith(currency));
 };
 
 const getTransactionsForType = (type, transactions) => transactions.filter((transaction) => transaction.type === type);
@@ -125,8 +134,8 @@ const getAmountAndValue = (transactions) => {
             const { amount: currAmount, price: currValue } = current;
 
             return {
-                amount: Number(prevAmount) + Number(currAmount),
-                value: Number(prevValue) + Number(currValue),
+                amount: prevAmount + currAmount,
+                value: prevValue + currValue,
             };
         }, { amount: 0, value: 0 });
 };
