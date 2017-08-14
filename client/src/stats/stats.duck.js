@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
 
 import * as service from './stats.service';
@@ -28,7 +27,9 @@ const LOAD_PROFILE_INFO_ERROR = `${namespace}LOAD_PROFILE_INFO_ERROR`;
 const UPDATE_COMBINED_INFO_START = `${namespace}UPDATE_COMBINED_INFO_START`;
 const UPDATE_COMBINED_INFO_SUCCESS = `${namespace}UPDATE_COMBINED_INFO_SUCCESS`;
 
+//
 // Action creators
+//
 const loadCachedTickerStart = () => ({ type: LOAD_CACHED_TICKER_START });
 const loadTickerStart = () => ({ type: LOAD_TICKER_START });
 const loadTickerSuccess = (ticker) => ({ type: LOAD_TICKER_SUCCESS, payload: ticker });
@@ -40,7 +41,7 @@ const loadProfileInfoSuccess = (profileInfo) => ({ type: LOAD_PROFILE_INFO_SUCCE
 const loadProfileInfoError = (error) => ({ type: LOAD_PROFILE_INFO_ERROR, payload: error });
 
 const updateCombinedInfoStart = () => ({ type: UPDATE_COMBINED_INFO_START });
-const updateCombinedInfoSuccess = () => ({ type: UPDATE_COMBINED_INFO_SUCCESS });
+const updateCombinedInfoSuccess = (combinedData) => ({ type: UPDATE_COMBINED_INFO_SUCCESS, payload: combinedData });
 
 //
 // Reducers
@@ -94,7 +95,6 @@ const tickerReducer = combineReducers({
 });
 
 // profileInfo
-
 const profileInfoBalancesReducer = (state = [], action = {}) => {
     switch (action.type) {
         case LOAD_PROFILE_INFO_SUCCESS: {
@@ -167,7 +167,6 @@ const profileInfoReducer = combineReducers({
 });
 
 // combined data (ticker + profileInfo)
-
 const combinedDataReducer = (state = [], action = {}) => {
     switch (action.type) {
         case UPDATE_COMBINED_INFO_SUCCESS: {
@@ -201,10 +200,10 @@ const loadTicker$ = action$ =>
             .map(loadTickerSuccess)
             .catch((err) => Observable.of(loadTickerError(err)));
 
-const tickerEpics = combineEpics(
+const tickerEpics = [
     loadCachedTicker$,
     loadTicker$,
-);
+];
 
 // profileInfo
 const loadCachedProfileInfo$ = action$ =>
@@ -219,10 +218,10 @@ const loadProfileInfo$ = action$ =>
             .map(loadProfileInfoSuccess)
             .catch((err) => Observable.of(loadProfileInfoError(err)));
 
-const profileInfoEpics = combineEpics(
+const profileInfoEpics = [
     loadCachedProfileInfo$,
     loadProfileInfo$,
-);
+];
 
 // combined data (ticker + profileInfo)
 const combineDataStart$ = action$ =>
@@ -245,21 +244,23 @@ const combineData$ = (action$, store) =>
             return Observable.of({ type: 'NOOP' });
         });
 
-const combinedDataEpics = combineEpics(
+const combinedDataEpics = [
     combineDataStart$,
     combineData$,
-);
+];
 
-const epic = combineEpics(
+const epics = [
     ...tickerEpics,
     ...profileInfoEpics,
     ...combinedDataEpics,
-);
+];
 
 export {
     reducer,
-    epic,
+    epics,
 
     loadCachedTickerStart,
+    loadTickerStart,
+    loadCachedProfileInfoStart,
     loadProfileInfoStart,
 };

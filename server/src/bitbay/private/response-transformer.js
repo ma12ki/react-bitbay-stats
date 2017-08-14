@@ -53,9 +53,10 @@ ____________________
             balance: 2,
             soldAmount: 0,
             boughtAmount: 2,
+            avgBoughtRate: 200,
             soldValue: 0,
             boughtValue: 20000,
-            gain: -20000,
+            avgSoldRate: 0,
             transactions: [
                 {
                     date: '2017-08-11 19:55:37',
@@ -106,8 +107,8 @@ const getCryptoBalances = (info, transactions) => {
     return Object.keys(cryptoCurrencies)
         .map((currency) => {
             const currencyTransactions = getTransactionsForCurrency(currency, transactions);
-            const { amount: boughtAmount, value: boughtValue } = getAmountAndValue(getTransactionsForType('BID', currencyTransactions));
-            const { amount: soldAmount, value: soldValue } = getAmountAndValue(getTransactionsForType('ASK', currencyTransactions));
+            const { amount: boughtAmount, value: boughtValue } = getTransactionMeta(getTransactionsForType('BID', currencyTransactions));
+            const { amount: soldAmount, value: soldValue } = getTransactionMeta(getTransactionsForType('ASK', currencyTransactions));
 
             return {
                 currency,
@@ -128,7 +129,7 @@ const getTransactionsForCurrency = (currency, transactions) => {
 
 const getTransactionsForType = (type, transactions) => transactions.filter((transaction) => transaction.type === type);
 
-const getAmountAndValue = (transactions) => {
+const getTransactionMeta = (transactions) => {
     return transactions.reduce((amountAndValue, current) => {
             const { amount: prevAmount, value: prevValue } = amountAndValue;
             const { amount: currAmount, price: currValue } = current;
