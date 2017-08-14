@@ -40,8 +40,24 @@ const StatsTable = ({ combined }) => {
             <tbody>
                 {rows}
             </tbody>
+            <tfoot>
+                <tr>
+                    <td>&Sigma;</td>
+                    <td colSpan={3}>{getSum(combined, 'boughtValue')}</td>
+                    <td colSpan={2}>{getSum(combined, 'soldValue')}</td>
+                    <td>{getSum(combined, 'gain')}</td>
+                    <td colSpan={2}>{getSum(combined, 'potentialValue')}</td>
+                    <td>{getSum(combined, 'potentialTotalGain')}</td>
+                </tr>
+            </tfoot>
         </table>
     );
+};
+
+const getSum = (rows, column) => {
+    return rows.reduce((sum, row) => {
+        return sum + row[column];
+    }, 0);
 };
 
 const mapStateToProps = (state) => ({
