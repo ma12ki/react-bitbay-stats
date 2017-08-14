@@ -2,9 +2,17 @@ import { combineReducers } from 'redux';
 import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
 
-// import { getUsers$ } from './users.service';
+import * as service from './stats.service';
+import { combineStats } from './combine-stats';
+import {
+    getTickerCurrencies,
+    getProfileInfoBalances,
+    getProfileInfoFee,
+} from './stats.selectors';
 
+//
 // Actions
+//
 const namespace = 'bitbay/stats/';
 
 const LOAD_CACHED_TICKER_START = `${namespace}LOAD_CACHED_TICKER_START`;
@@ -31,23 +39,17 @@ const loadProfileInfoStart = () => ({ type: LOAD_PROFILE_INFO_START });
 const loadProfileInfoSuccess = (profileInfo) => ({ type: LOAD_PROFILE_INFO_SUCCESS, payload: profileInfo });
 const loadProfileInfoError = (error) => ({ type: LOAD_PROFILE_INFO_ERROR, payload: error });
 
+const updateCombinedInfoStart = () => ({ type: UPDATE_COMBINED_INFO_START });
+const updateCombinedInfoSuccess = () => ({ type: UPDATE_COMBINED_INFO_SUCCESS });
 
-
-
+//
 // Reducers
-export const listReducer = (state = [], action = {}) => {
+//
+// ticker
+const tickerCurrenciesReducer = (state = [], action = {}) => {
     switch (action.type) {
-        case LOAD_USERS_SUCCESS: {
+        case LOAD_TICKER_SUCCESS: {
             return action.payload;
-        }
-        case SELECT_USER: {
-            const id = action.payload;
-            return state.map((user) => {
-                if (user.id === id) {
-                    user.selected = !user.selected;
-                }
-                return user;
-            });
         }
         default: {
             return state;
@@ -55,13 +57,14 @@ export const listReducer = (state = [], action = {}) => {
     }
 };
 
-export const loadingReducer = (state = false, action = {}) => {
+const tickerLoadingReducer = (state = false, action = {}) => {
     switch (action.type) {
-        case LOAD_USERS_START: {
+        case LOAD_CACHED_TICKER_START:
+        case LOAD_TICKER_START: {
             return true;
         }
-        case LOAD_USERS_SUCCESS:
-        case LOAD_USERS_ERROR: {
+        case LOAD_TICKER_ERROR:
+        case LOAD_TICKER_SUCCESS: {
             return false;
         }
         default: {
@@ -70,13 +73,12 @@ export const loadingReducer = (state = false, action = {}) => {
     }
 };
 
-export const errorReducer = (state = null, action = {}) => {
+const tickerErrorReducer = (state = null, action = {}) => {
     switch (action.type) {
-        case LOAD_USERS_START:
-        case LOAD_USERS_SUCCESS: {
+        case LOAD_TICKER_SUCCESS: {
             return null;
         }
-        case LOAD_USERS_ERROR: {
+        case LOAD_TICKER_ERROR: {
             return action.payload;
         }
         default: {
@@ -85,10 +87,91 @@ export const errorReducer = (state = null, action = {}) => {
     }
 };
 
-export const showSelectedReducer = (state = false, action = {}) => {
+const tickerReducer = combineReducers({
+    currencies: tickerCurrenciesReducer,
+    loading: tickerLoadingReducer,
+    error: tickerErrorReducer,
+});
+
+// profileInfo
+
+const profileInfoBalancesReducer = (state = [], action = {}) => {
     switch (action.type) {
-        case CONFIRM_SELECTION: {
+        case LOAD_PROFILE_INFO_SUCCESS: {
+            return action.payload.balances;
+        }
+        default: {
+            return state;
+        }
+    }
+};
+
+const profileInfoFeeReducer = (state = 0, action = {}) => {
+    switch (action.type) {
+        case LOAD_PROFILE_INFO_SUCCESS: {
+            return action.payload.fee;
+        }
+        default: {
+            return state;
+        }
+    }
+};
+
+const profileInfoFiatReducer = (state = {}, action = {}) => {
+    switch (action.type) {
+        case LOAD_PROFILE_INFO_SUCCESS: {
+            return action.payload.fiat;
+        }
+        default: {
+            return state;
+        }
+    }
+};
+
+const profileInfoLoadingReducer = (state = false, action = {}) => {
+    switch (action.type) {
+        case LOAD_CACHED_PROFILE_INFO_START:
+        case LOAD_PROFILE_INFO_START: {
             return true;
+        }
+        case LOAD_PROFILE_INFO_ERROR:
+        case LOAD_PROFILE_INFO_SUCCESS:{
+            return false;
+        }
+        default: {
+            return state;
+        }
+    }
+};
+
+const profileInfoErrorReducer = (state = null, action = {}) => {
+    switch (action.type) {
+        case LOAD_PROFILE_INFO_SUCCESS: {
+            return null;
+        }
+        case LOAD_PROFILE_INFO_ERROR: {
+            return action.payload;
+        }
+        default: {
+            return state;
+        }
+    }
+};
+
+const profileInfoReducer = combineReducers({
+    balances: profileInfoBalancesReducer,
+    fee: profileInfoFeeReducer,
+    fiat: profileInfoFiatReducer,
+    loading: profileInfoLoadingReducer,
+    error: profileInfoErrorReducer,
+});
+
+// combined data (ticker + profileInfo)
+
+const combinedDataReducer = (state = [], action = {}) => {
+    switch (action.type) {
+        case UPDATE_COMBINED_INFO_SUCCESS: {
+            return action.payload;
         }
         default: {
             return state;
@@ -97,21 +180,86 @@ export const showSelectedReducer = (state = false, action = {}) => {
 };
 
 const reducer = combineReducers({
-    list: listReducer,
-    loading: loadingReducer,
-    error: errorReducer,
-    showSelected: showSelectedReducer,
+    ticker: tickerReducer,
+    profileInfo: profileInfoReducer,
+    combined: combinedDataReducer,
 });
 
-export default reducer;
-
+//
 // Epics
-export const loadUsers$ = action$ =>
-    action$.ofType(LOAD_USERS_START)
-        .switchMap(() => getUsers$())
-            .map((users) => loadUsersSuccess(users))
-            .catch((err) => Observable.of(loadUsersError(err)));
+//
+// ticker
+const loadCachedTicker$ = action$ =>
+    action$.ofType(LOAD_CACHED_TICKER_START)
+        .switchMap(service.getCachedTicker$)
+            .map(loadTickerSuccess)
+            .catch((err) => Observable.of(loadTickerError(err)));
+            
+const loadTicker$ = action$ =>
+    action$.ofType(LOAD_TICKER_START)
+        .switchMap(service.getTicker$)
+            .map(loadTickerSuccess)
+            .catch((err) => Observable.of(loadTickerError(err)));
 
-export const usersEpics = combineEpics(
-    loadUsers$
+const tickerEpics = combineEpics(
+    loadCachedTicker$,
+    loadTicker$,
 );
+
+// profileInfo
+const loadCachedProfileInfo$ = action$ =>
+    action$.ofType(LOAD_CACHED_PROFILE_INFO_START)
+        .switchMap(service.getCachedProfileInfo$)
+            .map(loadProfileInfoSuccess)
+            .catch((err) => Observable.of(loadProfileInfoError(err)));
+
+const loadProfileInfo$ = action$ =>
+    action$.ofType(LOAD_PROFILE_INFO_START)
+        .switchMap(service.getProfileInfo$)
+            .map(loadProfileInfoSuccess)
+            .catch((err) => Observable.of(loadProfileInfoError(err)));
+
+const profileInfoEpics = combineEpics(
+    loadCachedProfileInfo$,
+    loadProfileInfo$,
+);
+
+// combined data (ticker + profileInfo)
+const combineDataStart$ = action$ =>
+    action$.ofType(LOAD_TICKER_SUCCESS, LOAD_PROFILE_INFO_SUCCESS)
+        .map(updateCombinedInfoStart);
+
+const combineData$ = (action$, store) =>
+    action$.ofType(UPDATE_COMBINED_INFO_START)
+        .map(() => {
+            const state = store.getState();
+            const tickerCurrencies = getTickerCurrencies(state);
+            const profileBalances = getProfileInfoBalances(state);
+            const profileFee = getProfileInfoFee(state);
+
+            return combineStats(tickerCurrencies, profileBalances, profileFee);
+        })
+        .map(updateCombinedInfoSuccess)
+        .catch((err) => {
+            console.error(err);
+            return Observable.of({ type: 'NOOP' });
+        });
+
+const combinedDataEpics = combineEpics(
+    combineDataStart$,
+    combineData$,
+);
+
+const epic = combineEpics(
+    ...tickerEpics,
+    ...profileInfoEpics,
+    ...combinedDataEpics,
+);
+
+export {
+    reducer,
+    epic,
+
+    loadCachedTickerStart,
+    loadProfileInfoStart,
+};
