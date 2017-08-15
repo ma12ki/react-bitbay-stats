@@ -6,22 +6,6 @@ import { CryptoCell, FiatCell } from './cells';
 
 import './StatsTable.css';
 
-class Cell extends React.PureComponent {
-    componentWillMount() {
-        console.log('CELL mount', Math.random());
-    }
-
-    componentWillReceiveProps(newProps, a) {
-        console.log('CELL receive props', newProps, a);
-    }
-
-    render() {
-        const { value } = this.props;
-        return (<td>{value}</td>);
-    }
-
-}
-
 const StatsTable = ({ combined }) => {
     const rows = combined.map((row) => {
         return (
