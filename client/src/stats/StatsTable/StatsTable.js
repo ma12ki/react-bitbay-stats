@@ -3,6 +3,22 @@ import { connect } from 'react-redux';
 
 import { getCombined } from '../stats.selectors';
 
+class Cell extends React.PureComponent {
+    componentWillMount() {
+        console.log('CELL mount', Math.random());
+    }
+
+    componentWillReceiveProps(newProps, a) {
+        console.log('CELL receive props', newProps, a);
+    }
+
+    render() {
+        const { value } = this.props;
+        return (<td>{value}</td>);
+    }
+
+}
+
 const StatsTable = ({ combined }) => {
     const rows = combined.map((row) => {
         return (
@@ -14,7 +30,7 @@ const StatsTable = ({ combined }) => {
                 <td>{row.soldAmount}</td>
                 <td>{row.soldValue}</td>
                 <td>{row.gain}</td>
-                <td>{row.rate}</td>
+                <Cell value={row.rate} />
                 <td>{row.potentialValue}</td>
                 <td>{row.potentialTotalGain}</td>
             </tr>
