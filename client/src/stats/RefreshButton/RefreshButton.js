@@ -1,6 +1,8 @@
 import React from 'react';
 import classnames from 'classnames';
 
+import { Button } from '../Button';
+
 import './RefreshButton.css';
 
 const RefreshButton = ({ refresh, loading, error, children }) => {
@@ -10,11 +12,11 @@ const RefreshButton = ({ refresh, loading, error, children }) => {
     );
 
     return (
-        <button className='RefreshButton' onClick={refresh} disabled={loading} title={error}>
+        <Button className='RefreshButton' onClick={refresh} disabled={loading} title={error}>
             <span className={iconClassNames}>&#x21bb;</span>
             {' '}
             {children}
-        </button>
+        </Button>
     );
 };
 

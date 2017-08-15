@@ -9,6 +9,7 @@ import {
     getTickerError,
 } from '../stats.selectors';
 import { RefreshButton } from '../RefreshButton';
+import { AutoUpdate } from '../AutoUpdate';
 
 import './RefreshBar.css';
 
@@ -38,6 +39,7 @@ const RefreshBar = () => {
     return (
         <div className='RefreshBar'>
             <TickerRefresh>Ticker</TickerRefresh>
+            <AutoUpdate />
             <ProfileInfoRefresh>Stats</ProfileInfoRefresh>
         </div>
     );
