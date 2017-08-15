@@ -2,3 +2,4 @@ export { reducer, epics, loadCachedProfileInfoStart, loadCachedTickerStart } fro
 
 export * from './StatsTable';
 export * from './RefreshBar';
+export * from './InfoBar';
