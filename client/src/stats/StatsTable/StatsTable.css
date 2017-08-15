@@ -2,6 +2,8 @@
     border-collapse: collapse;
     text-align: right;
     font-weight: bold;
+    width: 100%;
+    margin-top: 20px;
 }
 
 .StatsTable thead {

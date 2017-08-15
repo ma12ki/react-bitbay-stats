@@ -5,6 +5,11 @@
 .App-header {
   background-color: #222;
   height: 60px;
-  padding: 20px;
   color: white;
+}
+
+.App-content {
+  max-width: 1200px;
+  padding: 20px;
+  margin: 0 auto;
 }

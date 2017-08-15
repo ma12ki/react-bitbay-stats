@@ -10,6 +10,8 @@ import {
 } from '../stats.selectors';
 import { RefreshButton } from '../RefreshButton';
 
+import './RefreshBar.css';
+
 const mapTickerStateToProps = (state) => ({
     loading: getTickerLoading(state),
     error: getTickerError(state),
@@ -34,7 +36,7 @@ const ProfileInfoRefresh = connect(mapProfileInfoStateToProps, mapProfileInfoDis
 
 const RefreshBar = () => {
     return (
-        <div>
+        <div className='RefreshBar'>
             <TickerRefresh>Ticker</TickerRefresh>
             <ProfileInfoRefresh>Stats</ProfileInfoRefresh>
         </div>

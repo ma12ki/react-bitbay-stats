@@ -24,10 +24,14 @@ class App extends Component {
       <Provider store={store}>
         <div className="App">
           <div className="App-header">
-            <InfoBar />
+            <div className="App-content">
+              <InfoBar />
+            </div>
           </div>
-          <RefreshBar />
-          <StatsTable />
+          <div className="App-content">
+            <RefreshBar />
+            <StatsTable />
+          </div>
         </div>
       </Provider>
     );
