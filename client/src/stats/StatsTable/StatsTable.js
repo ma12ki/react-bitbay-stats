@@ -2,6 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { getCombined } from '../stats.selectors';
+import { CryptoCell, FiatCell } from './cells';
+
+import './StatsTable.css';
 
 class Cell extends React.PureComponent {
     componentWillMount() {
@@ -23,34 +26,44 @@ const StatsTable = ({ combined }) => {
     const rows = combined.map((row) => {
         return (
             <tr key={row.currency}>
-                <td>{row.currency}</td>
-                <td>{row.balance}</td>
-                <td>{row.boughtAmount}</td>
-                <td>{row.boughtValue}</td>
-                <td>{row.soldAmount}</td>
-                <td>{row.soldValue}</td>
-                <td>{row.gain}</td>
-                <Cell value={row.rate} />
-                <td>{row.potentialValue}</td>
-                <td>{row.potentialTotalGain}</td>
+                <td className='align-center'>{row.currency}</td>
+                <CryptoCell>{row.balance}</CryptoCell>
+                <CryptoCell>{row.boughtAmount}</CryptoCell>
+                <FiatCell>{row.boughtValue}</FiatCell>
+                <FiatCell>{row.avgBoughtRate}</FiatCell>
+                <CryptoCell>{row.soldAmount}</CryptoCell>
+                <FiatCell>{row.soldValue}</FiatCell>
+                <FiatCell>{row.avgSoldRate}</FiatCell>
+                <FiatCell>{row.gain}</FiatCell>
+                <FiatCell>{row.rate}</FiatCell>
+                <FiatCell>{row.potentialValue}</FiatCell>
+                <FiatCell>{row.potentialTotalGain}</FiatCell>
             </tr>
         );
     });
 
     return (
-        <table>
+        <table className='StatsTable'>
             <thead>
                 <tr>
-                    <th>currency</th>
-                    <th>balance</th>
-                    <th>boughtAmount</th>
-                    <th>boughtValue</th>
-                    <th>soldAmount</th>
-                    <th>soldValue</th>
-                    <th>gain</th>
-                    <th>rate</th>
-                    <th>potentialValue</th>
-                    <th>potentialTotalGain</th>
+                    <th colSpan={2}>Currency</th>
+                    <th colSpan={3}>Bought</th>
+                    <th colSpan={3}>Sold</th>
+                    <th rowSpan={2} title='Sold value - bought value'>Gain</th>
+                    <th rowSpan={2}>Current rate</th>
+                    <th colSpan={2}>Projection</th>
+                </tr>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Balance</th>
+                    <th>Amount</th>
+                    <th>Value</th>
+                    <th title='Value / amount'>Avg rate</th>
+                    <th>Amount</th>
+                    <th>Value</th>
+                    <th title='Value / amount'>Avg rate</th>
+                    <th title='Current rate * balance * (100 - fee)%'>Value</th>
+                    <th title='Value + gain'>Gain</th>
                 </tr>
             </thead>
             <tbody>
@@ -59,11 +72,15 @@ const StatsTable = ({ combined }) => {
             <tfoot>
                 <tr>
                     <td>&Sigma;</td>
-                    <td colSpan={3}>{getSum(combined, 'boughtValue')}</td>
-                    <td colSpan={2}>{getSum(combined, 'soldValue')}</td>
-                    <td>{getSum(combined, 'gain')}</td>
-                    <td colSpan={2}>{getSum(combined, 'potentialValue')}</td>
-                    <td>{getSum(combined, 'potentialTotalGain')}</td>
+                    <td colSpan={2}></td>
+                    <FiatCell>{getSum(combined, 'boughtValue')}</FiatCell>
+                    <td colSpan={2}></td>
+                    <FiatCell>{getSum(combined, 'soldValue')}</FiatCell>
+                    <td></td>
+                    <FiatCell>{getSum(combined, 'gain')}</FiatCell>
+                    <td></td>
+                    <FiatCell>{getSum(combined, 'potentialValue')}</FiatCell>
+                    <FiatCell>{getSum(combined, 'potentialTotalGain')}</FiatCell>
                 </tr>
             </tfoot>
         </table>

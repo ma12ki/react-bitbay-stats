@@ -1,0 +1,13 @@
+.StatsTable {
+    border-collapse: collapse;
+    text-align: right;
+}
+
+.StatsTable thead {
+    text-align: center;
+}
+
+.StatsTable td, .StatsTable th {
+    padding: 3px 10px;
+    border: 1px solid red;
+}
