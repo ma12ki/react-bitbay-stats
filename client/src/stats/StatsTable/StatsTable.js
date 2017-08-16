@@ -21,6 +21,7 @@ const StatsTable = ({ combined }) => {
                 <FiatCell>{row.gain}</FiatCell>
                 <FiatCell>{row.rate}</FiatCell>
                 <FiatCell>{row.potentialValue}</FiatCell>
+                <FiatCell>{row.returnPercent}</FiatCell>
                 <FiatCell>{row.potentialTotalGain}</FiatCell>
             </tr>
         );
@@ -35,7 +36,7 @@ const StatsTable = ({ combined }) => {
                     <th colSpan={3}>Sold</th>
                     <th rowSpan={2} title='Sold value - bought value'>Gain</th>
                     <th rowSpan={2}>Current rate</th>
-                    <th colSpan={2}>Projection</th>
+                    <th colSpan={3}>Projection</th>
                 </tr>
                 <tr>
                     <th>Symbol</th>
@@ -47,7 +48,8 @@ const StatsTable = ({ combined }) => {
                     <th>Value</th>
                     <th title='Value / amount'>Avg rate</th>
                     <th title='Current rate * balance * (100 - fee)%'>Value</th>
-                    <th title='Value + gain'>Gain</th>
+                    <th title='Current rate / avg sold rate'>Return [%]</th>
+                    <th title='Value + gain'>Return</th>
                 </tr>
             </thead>
             <tbody>
@@ -64,6 +66,7 @@ const StatsTable = ({ combined }) => {
                     <FiatCell>{getSum(combined, 'gain')}</FiatCell>
                     <td></td>
                     <FiatCell>{getSum(combined, 'potentialValue')}</FiatCell>
+                    <td></td>
                     <FiatCell>{getSum(combined, 'potentialTotalGain')}</FiatCell>
                 </tr>
             </tfoot>
