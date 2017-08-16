@@ -112,11 +112,11 @@ const getCryptoBalances = (info, transactions) => {
 
             return {
                 currency,
-                balance: boughtAmount - soldAmount,
-                soldAmount,
-                soldValue,
+                balance: Number((info.balances[currency] || {}).available),
                 boughtAmount,
                 boughtValue,
+                soldAmount,
+                soldValue,
                 gain: soldValue - boughtValue,
                 transactions: currencyTransactions,
             };
