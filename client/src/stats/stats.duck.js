@@ -27,6 +27,8 @@ const LOAD_PROFILE_INFO_ERROR = `${namespace}LOAD_PROFILE_INFO_ERROR`;
 const UPDATE_COMBINED_INFO_START = `${namespace}UPDATE_COMBINED_INFO_START`;
 const UPDATE_COMBINED_INFO_SUCCESS = `${namespace}UPDATE_COMBINED_INFO_SUCCESS`;
 
+const SET_AUTO_UPDATE_PERIOD = `${namespace}SET_AUTO_UPDATE_PERIOD`;
+
 //
 // Action creators
 //
@@ -42,6 +44,8 @@ const loadProfileInfoError = (error) => ({ type: LOAD_PROFILE_INFO_ERROR, payloa
 
 const updateCombinedInfoStart = () => ({ type: UPDATE_COMBINED_INFO_START });
 const updateCombinedInfoSuccess = (combinedData) => ({ type: UPDATE_COMBINED_INFO_SUCCESS, payload: combinedData });
+
+const setAutoUpdatePeriod = (period) => ({ type: SET_AUTO_UPDATE_PERIOD, payload: period });
 
 //
 // Reducers
@@ -178,10 +182,23 @@ const combinedDataReducer = (state = [], action = {}) => {
     }
 };
 
+// autoUpdatePeriod
+const autoUpdatePeriodReducer = (state = 120, action = {}) => {
+    switch (action.type) {
+        case SET_AUTO_UPDATE_PERIOD: {
+            return action.payload;
+        }
+        default: {
+            return state;
+        }
+    }
+};
+
 const reducer = combineReducers({
     ticker: tickerReducer,
     profileInfo: profileInfoReducer,
     combined: combinedDataReducer,
+    autoUpdatePeriod: autoUpdatePeriodReducer,
 });
 
 //
@@ -263,4 +280,5 @@ export {
     loadTickerStart,
     loadCachedProfileInfoStart,
     loadProfileInfoStart,
+    setAutoUpdatePeriod,
 };

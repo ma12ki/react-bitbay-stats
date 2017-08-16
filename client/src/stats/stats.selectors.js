@@ -14,6 +14,8 @@ const getProfileInfoError = (state) => getProfileInfo(state).error || null;
 
 const getCombined = (state) => getStats(state).combined || [];
 
+const getAutoUpdatePeriod = (state) => getStats(state).autoUpdatePeriod || 120;
+
 export {
     getStats,
     
@@ -30,4 +32,6 @@ export {
     getProfileInfoError,
 
     getCombined,
+
+    getAutoUpdatePeriod,
 };

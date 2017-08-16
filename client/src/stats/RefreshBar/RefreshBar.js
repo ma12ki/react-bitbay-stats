@@ -38,8 +38,10 @@ const ProfileInfoRefresh = connect(mapProfileInfoStateToProps, mapProfileInfoDis
 const RefreshBar = () => {
     return (
         <div className='RefreshBar'>
-            <TickerRefresh>Ticker</TickerRefresh>
-            <AutoUpdate />
+            <div className='RefreshBar'>
+                <TickerRefresh>Ticker</TickerRefresh>
+                <AutoUpdate />
+            </div>
             <ProfileInfoRefresh>Stats</ProfileInfoRefresh>
         </div>
     );
