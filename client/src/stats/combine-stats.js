@@ -7,7 +7,7 @@ const combineStats = (tickerCurrencies, profileBalances, profileFee) => {
         row.rate = (tickerCurrencies[row.currency] || {}).bid;
         row.potentialValue = row.rate * row.balance * (1 - (feePercent));
         row.potentialTotalGain = row.potentialValue + row.gain;
-        row.returnPercent = (row.rate / row.avgBoughtRate * 100) - 100;
+        row.returnPercent = row.potentialValue / row.boughtValue * 100 - 100;
 
         return row;
     });
